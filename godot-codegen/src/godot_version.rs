@@ -28,7 +28,7 @@ pub struct GodotVersion {
 
 pub fn parse_godot_version(version_str: &str) -> Result<GodotVersion, Box<dyn Error>> {
     let regex = Regex::new(
-        r#"(\d+)\.(\d+)(?:\.(\d+))?\.(alpha|beta|dev|stable)[0-9]*\.(?:(?:official|custom_build)\.([a-f0-9]+)|official)"#,
+        r#"(\d+)\.(\d+)(?:\.(\d+))?\.(alpha|beta|dev|stable)[0-9]*\.(?:mono\.)*(?:(?:official|custom_build)\.([a-f0-9]+)|official)"#,
     )?;
 
     let caps = regex.captures(version_str).ok_or("Regex capture failed")?;
@@ -73,6 +73,7 @@ fn test_godot_versions() {
         ("3.5.beta.custom_build.837f2c5f8", 3, 5, 0, "beta", s("837f2c5f8")),
         ("4.0.dev.custom_build.e7e9e663b", 4, 0, 0, "dev", s("e7e9e663b")),
         ("4.0.alpha.custom_build.faddbcfc0", 4, 0, 0, "alpha", s("faddbcfc0")),
+        ("4.0.beta6.mono.official.7f8ecffa5", 4, 0, 0, "beta", s("7f8ecffa5")),
     ];
 
     let bad_versions = [
